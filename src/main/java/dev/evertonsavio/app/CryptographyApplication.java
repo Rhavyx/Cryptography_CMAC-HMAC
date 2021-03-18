@@ -45,22 +45,49 @@ public class CryptographyApplication {
 
         //System.out.println("BYTES: "+ Arrays.toString(perma));
 
-        String myUUID = "941089c5-d813-4c65-b0c2-fc51c43d49f8";
+        String myUUID = "295e40e0a1ecf6f9c9127eed1358ad8c";
+       // String myUUID = "941089c5-d813-4c65-b0c2-fc51c43d49f8";
         myUUID = myUUID.replace("-", "");
+        //System.out.println(myUUID.length());
+        //String[] arr = new String[myUUID.length()/2];
+
+        int a = 0;
+        byte[] testByte = new byte[16];
+        for(int i = 0; i < 32; i = i+2){
+            System.out.println(Integer.parseInt(myUUID.substring(i, i+2), 16));
+            testByte[a] = (byte) Integer.parseInt(myUUID.substring(i, i+2), 16);
+        }
+        System.out.println(testByte);
+
+//        for(int i = 0; i < arr.length; i++){
+//            arr[i] = myUUID.
+//        }
+
+        StringBuffer sb = new StringBuffer();
+        char ch[] = myUUID.toCharArray();
+        
+        System.out.println(ch);
+        for(int i = 0; i < ch.length; i++) {
+            String hexString = Integer.toHexString(ch[i]);
+            sb.append(hexString);
+        }
+        System.out.println(sb);
+        String result = sb.toString();
+        System.out.println(result);
+
         byte[] myBytesUUID = myUUID.getBytes(StandardCharsets.UTF_8);
         System.out.println(dumpBytes(myBytesUUID));
 
         byte test = 0x29;
 
-        List<String> byteArray = new ArrayList<>();
-        for(int i = 0; i < 32; i = i + 2){
-            byteArray.add("0x" + myUUID.substring(i, i + 2));
-        }
-        for(String str : byteArray){
-            System.out.println(Byte.parseByte(str));
-        }
+//        List<String> byteArray = new ArrayList<>();
+//        for(int i = 0; i < 32; i = i + 2){
+//            byteArray.add("0x" + myUUID.substring(i, i + 2));
+//        }
+//        for(String str : byteArray){
+//            System.out.println(Byte.parseByte(str));
+//        }
         //byte[] testandoConversao = new byte[]{(byte) byteArray.get(0), }
-
 
         StringBuilder s20 = new StringBuilder();
 
@@ -75,6 +102,7 @@ public class CryptographyApplication {
         CMac mac = new CMac(aes);
         mac.init(params);
         mac.update(msg, 0, msg.length);
+
         byte[] out = new byte[mac.getMacSize()];
         mac.doFinal(out, 0);
 
