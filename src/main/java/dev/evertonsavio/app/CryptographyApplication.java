@@ -65,7 +65,7 @@ public class CryptographyApplication {
 
         StringBuffer sb = new StringBuffer();
         char ch[] = myUUID.toCharArray();
-        
+
         System.out.println(ch);
         for(int i = 0; i < ch.length; i++) {
             String hexString = Integer.toHexString(ch[i]);
