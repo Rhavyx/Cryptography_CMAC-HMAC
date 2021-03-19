@@ -64,7 +64,7 @@ public class CryptographyApplication {
         System.out.println("TEST BYTE SIZE: " + testByte.length);
         String encodedTESTBYTE = Base64.getEncoder().encodeToString(testByte);
 
-        System.out.println("STRING 64 ENCODED: " + encodedTESTBYTE);
+        System.out.println("BYTE 64 ENCODED: " + encodedTESTBYTE);
 
     }
 
