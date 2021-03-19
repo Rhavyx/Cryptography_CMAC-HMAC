@@ -7,9 +7,11 @@ import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.macs.CMac;
 import org.bouncycastle.crypto.params.KeyParameter;
 
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 public class CryptographyApplication {
@@ -68,12 +70,41 @@ public class CryptographyApplication {
 
     }
 
+    public static byte[] longToBytes(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.putLong(x);
+        return buffer.array();
+    }
+
+    public static long bytesToLong(byte[] bytes) {
+        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+        buffer.put(bytes);
+        buffer.flip();//need flip
+        return buffer.getLong();
+    }
+
+    public static void getDate(){
+
+        Date datenow = new Date();
+        System.out.println(datenow);
+        System.out.println(datenow.getTime());
+        //datenow = datenow.getTime() + (60 * 1000);
+        Long newDate = datenow.getTime() + (1 * 1000);
+        System.out.println(newDate);
+        System.out.println(new Date(newDate));
+        Long year = (newDate / 1000 / 60 / 60 / 24 / 365) + 1970;
+        System.out.println(year);
+        byte[] meuByte = longToBytes(year);
+        System.out.println(meuByte[7]);
+    }
+
     public static void main(String[] args) {
 
         //HexStringToByteArray hex = new HexStringToByteArray();
         //hex.hexStringToByte();
 
-        getCMAC();
+        //getCMAC();
+        getDate();
     }
 
 }
