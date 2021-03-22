@@ -1,5 +1,6 @@
 package dev.evertonsavio.app;
 
+import dev.evertonsavio.app.utils.DateBytes;
 import dev.evertonsavio.app.utils.HexStringToByteArray;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
@@ -12,6 +13,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class CryptographyApplication {
@@ -70,44 +73,7 @@ public class CryptographyApplication {
 
     }
 
-    public static byte[] longToBytes(long x) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.putLong(x);
-        return buffer.array();
-    }
 
-    public static long bytesToLong(byte[] bytes) {
-        ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
-        buffer.put(bytes);
-        buffer.flip();//need flip
-        return buffer.getLong();
-    }
-
-    public static void getDate(){
-
-        Date datenow = new Date();
-        System.out.println(datenow);
-        System.out.println(datenow.getTime());
-        //datenow = datenow.getTime() + (60 * 1000);
-        Long newDate = datenow.getTime() + (1 * 1000);
-        System.out.println(newDate);
-        System.out.println(new Date(newDate));
-        Long year = (newDate / 1000 / 60 / 60 / 24 / 365) + 1970;
-        System.out.println(year);
-        byte[] meuByte = longToBytes(year);
-        System.out.println(Long.toHexString(year));
-        String longHEX = Long.toHexString(65535L);
-        System.out.println(longHEX);
-
-        int a = 0;
-        byte[] testByte = new byte[2];
-        for(int i = 0; i < 4; i = i+2){
-            System.out.println(Integer.parseInt(longHEX.substring(i, i+2), 16) + " " + longHEX.substring(i, i+2));
-            testByte[a] = (byte) Integer.parseInt(longHEX.substring(i, i+2), 16);
-            a = a +1;
-        }
-
-    }
 
     private static byte[] longToByteArray ( final long i ) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -225,14 +191,17 @@ public class CryptographyApplication {
         //HexStringToByteArray hex = new HexStringToByteArray();
         //hex.hexStringToByte();
 
+        DateBytes dateBytes = new DateBytes();
+        dateBytes.getDate();
+
         //getCMAC();
-        //getDate();
+//        getDate();
 
-        String cmac = calculateCmac("295e40e0a1ecf6f9c9127eed1358ad8c", (byte) 0x00, 4294967295L,
-                4294967295L, 65535L, 65535L, Byte.valueOf((byte) 127),
-                "295e40e0a1ecf6f9c1227eed1358ad8c");
-
-        System.out.println(cmac);
+//        String cmac = calculateCmac("295e40e0a1ecf6f9c9127eed1358ad8c", (byte) 0x00, 4294967295L,
+//                4294967295L, 65535L, 65535L, Byte.valueOf((byte) 127),
+//                "295e40e0a1ecf6f9c1227eed1358ad8c");
+//
+//        System.out.println(cmac);
     }
 
 }
