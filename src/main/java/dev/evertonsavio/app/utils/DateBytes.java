@@ -23,9 +23,9 @@ public class DateBytes {
 
         Date datenow = new Date();
         System.out.println(datenow);
-        System.out.println(datenow.getTime());
+        System.out.println(datenow.getTime()/1000);
         //datenow = datenow.getTime() + (60 * 1000);
-        Long newDate = datenow.getTime() + (1 * 1000);
+        Long newDate = datenow.getTime()/1000 + (1 * 1000); //+1 segundo
         System.out.println(newDate);
         System.out.println(new Date(newDate));
         Long year = (newDate / 1000 / 60 / 60 / 24 / 365) + 1970;
@@ -34,7 +34,6 @@ public class DateBytes {
         LocalDate localDate = datenow.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int month = localDate.getMonthValue();
         System.out.println(month);
-
 
         //byte[] meuByte = longToBytes(year);
         System.out.println(Long.toHexString(year));

@@ -1,5 +1,6 @@
 package dev.evertonsavio.app;
 
+import dev.evertonsavio.app.utils.CmacUtils;
 import dev.evertonsavio.app.utils.DateBytes;
 import dev.evertonsavio.app.utils.HexStringToByteArray;
 import org.bouncycastle.crypto.BlockCipher;
@@ -73,8 +74,6 @@ public class CryptographyApplication {
 
     }
 
-
-
     private static byte[] longToByteArray ( final long i ) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(bos);
@@ -83,156 +82,21 @@ public class CryptographyApplication {
         return bos.toByteArray();
     }
 
-    private static String calculateCmac (String uuid, byte role, Long uctTime, Long uctDelta, Long timeInit,
-                                  Long timeDelta, byte days, String secret) throws IOException {
-
-        byte byteArray = 0b01111111;
-        if(days == byteArray){
-            System.out.println("TRUE");
-        }
-
-//        byte[] myTimeTest = longToByteArray(uctTime);
-//        System.out.println(myTimeTest);
-//        System.out.println(myTimeTest.length);
-//        System.out.println(myTimeTest.toString());
-//        for(byte b: myTimeTest){
-//            System.out.println(b);
-//        }
-//        String myTimeTestHex = Long.toHexString(uctTime);
-//        System.out.println(myTimeTestHex);
-//        System.out.println(myTimeTestHex.length());
-//
-//        int a = 0;
-//        byte[] testB = new byte[4]; //2 TO utcINIT
-//        for(int i = 0; i< myTimeTestHex.length(); i = i + 2){
-//            System.out.println(Integer.parseInt(myTimeTestHex.substring(i, i+2), 16) + " " + myTimeTestHex.substring(i, i+2));
-//            testB[a] = (byte) Integer.parseInt(myTimeTestHex.substring(i, i+2), 16);
-//            a++;
-//        }
-
-        //secret bytes
-        int a = 0;
-        byte[] secretByte = new byte[16];
-        for(int i = 0; i < 32; i = i+2){
-            System.out.println(Integer.parseInt(secret.substring(i, i+2), 16) + " " + secret.substring(i, i+2));
-            secretByte[a] = (byte) Integer.parseInt(secret.substring(i, i+2), 16);
-            a = a +1;
-        }
-
-        //msg bytes
-        a = 0;
-        byte[] msgByte = new byte[30];
-        for(int i = 0; i < 32; i = i+2){
-            //System.out.println(Integer.parseInt(uuid.substring(i, i+2), 16) + " " + uuid.substring(i, i+2));
-            msgByte[a] = (byte) Integer.parseInt(uuid.substring(i, i+2), 16);
-            a++;
-        }
-
-        msgByte[16] = role;
-
-//        byte[] uctTimeByte = longToByteArray(uctTime);
-//        System.out.println(uctTimeByte);
-//        System.out.println(uctTimeByte.length);
-//        System.out.println(uctTimeByte.toString());
-//        for(byte b: uctTimeByte){
-//            System.out.println(b);
-//        }
-        String myUctTimeHex = Long.toHexString(uctTime);
-        System.out.println(myUctTimeHex);
-        System.out.println(myUctTimeHex.length());
-
-        //byte[] testB = new byte[4]; //2 TO utcINIT
-        for(int i = 0; i< myUctTimeHex.length(); i = i + 2){
-            System.out.println(Integer.parseInt(myUctTimeHex.substring(i, i+2), 16) + " " + myUctTimeHex.substring(i, i+2));
-            msgByte[a] = (byte) Integer.parseInt(myUctTimeHex.substring(i, i+2), 16);
-            a++;
-        }
-
-        String myUctDeltaHex = Long.toHexString(uctDelta);
-        System.out.println(myUctDeltaHex);
-        System.out.println(myUctDeltaHex.length());
-
-        //byte[] testB = new byte[4]; //2 TO utcINIT
-        for(int i = 0; i< myUctDeltaHex.length(); i = i + 2){
-            System.out.println(Integer.parseInt(myUctDeltaHex.substring(i, i+2), 16) + " " + myUctDeltaHex.substring(i, i+2));
-            msgByte[a] = (byte) Integer.parseInt(myUctDeltaHex.substring(i, i+2), 16);
-            a++;
-        }
-
-        String timeInitHex = Long.toHexString(timeInit);
-        System.out.println(timeInitHex);
-        System.out.println(timeInitHex.length());
-
-        //byte[] testB = new byte[2]; //2 TO utcINIT
-        for(int i = 0; i< timeInitHex.length(); i = i + 2){
-            System.out.println(Integer.parseInt(timeInitHex.substring(i, i+2), 16) + " " + timeInitHex.substring(i, i+2));
-            msgByte[a] = (byte) Integer.parseInt(timeInitHex.substring(i, i+2), 16);
-            a++;
-            System.out.println("AAAAAAAAA: " + a);
-        }
-
-        String timeDeltaHex = Long.toHexString(timeDelta);
-        System.out.println(timeDeltaHex);
-        System.out.println(timeDeltaHex.length());
-
-        //byte[] testB = new byte[2]; //2 TO utcINIT
-        for(int i = 0; i< timeDeltaHex.length(); i = i + 2){
-            System.out.println(Integer.parseInt(timeDeltaHex.substring(i, i+2), 16) + " " + timeDeltaHex.substring(i, i+2));
-            msgByte[a] = (byte) Integer.parseInt(timeDeltaHex.substring(i, i+2), 16);
-            a++;
-            System.out.println("AAAAAAAAA: " + a);
-        }
-
-        msgByte[29] = days;
-
-        CipherParameters params = new KeyParameter(secretByte);
-        BlockCipher aes = new AESEngine();
-        CMac mac = new CMac(aes);
-        mac.init(params);
-        mac.update(msgByte, 0, msgByte.length);
-
-        byte[] out = new byte[mac.getMacSize()];
-        mac.doFinal(out, 0);
-
-        StringBuilder s19 = new StringBuilder();
-        for (byte b : msgByte){
-            s19.append(String.format("%02X", b));
-        }
-        System.out.println("ecrypted msg cmac: " + s19.toString());
-        for (byte b : out) {
-            s19.append(String.format("%02X", b));
-        }
-        System.out.println("ecrypted secret appended:" + s19.toString());
-
-        int d = 0;
-        byte[] testByte = new byte[s19.length()/2];
-        System.out.println(s19.length());
-        for(int i = 0; i < s19.length(); i = i+2){
-            System.out.println(Integer.parseInt(s19.substring(i, i+2), 16) + " " + s19.substring(i, i+2));
-            testByte[d] = (byte) Integer.parseInt(s19.substring(i, i+2), 16);
-            d = d +1;
-        }
-
-        System.out.println("TEST BYTE SIZE: " + testByte.length);
-        String encodedTESTBYTE = Base64.getEncoder().encodeToString(testByte);
-
-        return encodedTESTBYTE;
-    }
-
     public static void main(String[] args) throws IOException {
 
         //HexStringToByteArray hex = new HexStringToByteArray();
         //hex.hexStringToByte();
 
-//        DateBytes dateBytes = new DateBytes();
-//        dateBytes.getDate();
+        DateBytes dateBytes = new DateBytes();
+        dateBytes.getDate();
 
         //getCMAC();
 //        getDate();
 
-        String cmac = calculateCmac("af5e40e0a1ecf6f9c9127eed1358ad8c", (byte) 0x00, 4294967295L,
-                4294967295L, 65535L, 65535L, Byte.valueOf((byte) 127),
-                "875e40e0a1ecf6f9c1227eed1358ad10");
+        CmacUtils cmacUtils = new CmacUtils();
+
+        String cmac = cmacUtils.calculateCmac("af5e40e0a1ecf6f9c9127eed1358ad8c", (byte) 0x00, 4294967295L,
+                4294967295L, Byte.valueOf((byte) 127), "875e40e0a1ecf6f9c1227eed1358ad10");
 
         System.out.println(cmac);
     }
