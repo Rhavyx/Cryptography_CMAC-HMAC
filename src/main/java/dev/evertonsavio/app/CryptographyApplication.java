@@ -2,6 +2,7 @@ package dev.evertonsavio.app;
 
 import dev.evertonsavio.app.utils.CmacUtils;
 import dev.evertonsavio.app.utils.DateBytes;
+import dev.evertonsavio.app.utils.EncryptDecrypt;
 import dev.evertonsavio.app.utils.HexStringToByteArray;
 import org.bouncycastle.crypto.BlockCipher;
 import org.bouncycastle.crypto.CipherParameters;
@@ -84,21 +85,50 @@ public class CryptographyApplication {
 
     public static void main(String[] args) throws IOException {
 
-        //HexStringToByteArray hex = new HexStringToByteArray();
-        //hex.hexStringToByte();
+//          HexStringToByteArray hex = new HexStringToByteArray();
+//          hex.hexStringToByte();
 
-        DateBytes dateBytes = new DateBytes();
-        dateBytes.getDate();
+//        DateBytes dateBytes = new DateBytes();
+//        dateBytes.getDate();
 
-        //getCMAC();
+//          getCMAC();
 //        getDate();
 
-        CmacUtils cmacUtils = new CmacUtils();
+//        CmacUtils cmacUtils = new CmacUtils();
+//
+//        String cmac = cmacUtils.calculateCmac("af5e40e0a1ecf6f9c9127eed1358ad8c", (byte) 0x00, 4294967295L,
+//                4294967295L, Byte.valueOf((byte) 127), "875e40e0a1ecf6f9c1227eed1358ad10");
+//
+//        System.out.println(cmac);
 
-        String cmac = cmacUtils.calculateCmac("af5e40e0a1ecf6f9c9127eed1358ad8c", (byte) 0x00, 4294967295L,
-                4294967295L, Byte.valueOf((byte) 127), "875e40e0a1ecf6f9c1227eed1358ad10");
+        EncryptDecrypt encryptDecrypt = new EncryptDecrypt();
 
-        System.out.println(cmac);
+        String decrtKey = encryptDecrypt.decrypt("/84m6oRkn3gvIHxf/HuUnSko8PfSY5A1oAESvL4t0pHFbBbuX0kF4NXyPoYfD6u7");
+        System.out.println(decrtKey);
+        //"7923539735AD6BF62EF7C8C7196B04D4DA33BD467743CB20F0DE877016E7492E"
+
+        String inputString = decrtKey;
+        System.out.println("LENGHT OF STRING: " + inputString.length());
+
+        byte[] byteKey = new byte[16];
+        int a = 0;
+        for(int i = 0; i < inputString.length() ; i= i + 2){
+            System.out.println(Integer.parseInt(inputString.substring(i, i+2), 16) + " " + inputString.substring(i, i+2));
+            byteKey[a] = (byte) Integer.parseInt(inputString.substring(i, i+2), 16);
+            a++;
+        }
+
+        //System.out.println("O BYTE ARRAY É: " + byteKey[15]);
+        String stringToDecrypt = "5D C9 70 95 BB 7E BE 81 A7 D3 3E 78 27 D5 C6 08 01 13 48 6A D7 0A 12 17 70 9D 05 00 06 20 1E E2";
+        stringToDecrypt = stringToDecrypt.replace(" ", "");
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (byte b : byteKey){ stringBuilder.append(String.format("%02X", b)); }
+
+        System.out.println(stringBuilder);
+        System.out.println(stringToDecrypt);
+
+
     }
 
 }
