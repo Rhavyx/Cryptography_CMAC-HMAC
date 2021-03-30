@@ -20,7 +20,7 @@ public class AESEncrypyDecrypt {
         }
         return byteKey;
     }
-//TEST
+
     public static String encrypt(String value) {
         try {
             IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
