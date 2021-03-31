@@ -1,4 +1,4 @@
-package dev.evertonsavio.app;
+package dev.evertonsavio.app.utils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
