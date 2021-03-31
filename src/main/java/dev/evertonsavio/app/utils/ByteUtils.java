@@ -5,31 +5,6 @@ import java.util.Date;
 
 public class ByteUtils {
 
-    private static long convertByteArrayToLong(byte[] longBytes){
-        ByteBuffer byteBuffer = ByteBuffer.allocate(Long.BYTES);
-        byteBuffer.put(longBytes);
-        byteBuffer.flip();
-        return byteBuffer.getLong();
-    }
-
-    public static long[] convertByteArrayToLongArray(byte[] data) {
-        if (data == null || data.length % Long.BYTES != 0) return null;
-        // ----------
-        long[] longs = new long[data.length / Long.BYTES];
-        for (int i = 0; i < longs.length; i++)
-            longs[i] = ( convertByteArrayToLong(new byte[] {
-                    data[(i*Long.BYTES)],
-                    data[(i*Long.BYTES)+1],
-                    data[(i*Long.BYTES)+2],
-                    data[(i*Long.BYTES)+3],
-                    data[(i*Long.BYTES)+4],
-                    data[(i*Long.BYTES)+5],
-                    data[(i*Long.BYTES)+6],
-                    data[(i*Long.BYTES)+7],
-            } ));
-        return longs;
-    }
-
     private static void setStamp(String timeString){
 
         System.out.println(timeString);
