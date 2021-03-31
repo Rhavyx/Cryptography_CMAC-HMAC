@@ -10,17 +10,10 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.*;
 
 public class CryptographyApplication {
-
-    private static byte[] longToByteArray ( final long i ) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(bos);
-        dos.writeLong(i);
-        dos.flush();
-        return bos.toByteArray();
-    }
 
     public static void main(String[] args) throws IOException {
 
